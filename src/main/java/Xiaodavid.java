@@ -19,7 +19,7 @@ public class Xiaodavid {
                 break;
             }
 
-            if (input.equals("list")){
+            else if (input.equals("list")){
                 System.out.println("------------------------------------");
                 System.out.println("Here are the tasks in your list:");
                 for(int i = 0; i < tasks.size();i++) {
@@ -30,7 +30,7 @@ public class Xiaodavid {
                 continue;
             }
 
-            if (input.startsWith("mark")){
+            else if (input.startsWith("mark")){
                 try {
                     int index = Integer.parseInt(input.substring(5)) - 1;
                     Task tsk =  tasks.get(index);
@@ -40,11 +40,13 @@ public class Xiaodavid {
                     System.out.println("  " + tsk);
                     System.out.println("------------------------------------");
                 } catch (Exception e){
-                    System.out.println("Invalid Task number.");
+                    System.out.println("------------------------------------");
+                    System.out.println("that task number dont exist la you goooon.");
+                    System.out.println("------------------------------------");
                 }
 
             }
-            if (input.startsWith("unmark")){
+            else if (input.startsWith("unmark")){
                 try {
                     int index = Integer.parseInt(input.substring(7)) - 1;
                     Task tsk =  tasks.get(index);
@@ -54,50 +56,89 @@ public class Xiaodavid {
                     System.out.println("  " + tsk);
                     System.out.println("------------------------------------");
                 } catch (Exception e){
-                    System.out.println("Invalid Task number.");
+                    System.out.println("------------------------------------");
+                    System.out.println("that task number dont exist la you goooon.");
+                    System.out.println("------------------------------------");
                 }
             }
             // Handle todo
-            if (input.startsWith("todo ")) {
-                String desc = input.substring(5);
-                Task newTask = new Todo(desc);
-                tasks.add(newTask);
-                printAdded(newTask, tasks.size());
+            else if (input.startsWith("todo")) {
+                if(input.length() <=5){
+                    System.out.println("------------------------------------");
+                    System.out.println("the description of todo cannot be empty lehh you goooon.");
+                    System.out.println("------------------------------------");
+                }
+                else {
+                    String desc = input.substring(5);
+                    Task newTask = new Todo(desc);
+                    tasks.add(newTask);
+                    printAdded(newTask, tasks.size());
+                }
                 continue;
             }
             //Handle deadline
-            if (input.startsWith("deadline ")){
-                String[] parts = input.substring(9).split("/by",2);
-                String desc = parts[0].trim();
-                String by = parts.length > 1 ? parts[1].trim() : "";
-                Task newTask = new Deadline(desc, by);
-                tasks.add(newTask);
-                printAdded(newTask, tasks.size());
-                continue;
+            else if (input.startsWith("deadline")){
+                if(input.length() <= 9 || !input.contains("/by")){
+                    System.out.println("------------------------------------");
+                    System.out.println("ehh deadline must have description and a /by time you goooon.");
+                    System.out.println("------------------------------------");
+                }
+                else {
+                    String[] parts = input.substring(9).split("/by", 2);
+                    String desc = parts[0].trim();
+                    String by = parts[1].trim();
+                    if(desc.isEmpty() || by.isEmpty()){
+                        System.out.println("------------------------------------");
+                        System.out.println("ehh deadline description or /by cannot be empty you goooon.");
+                        System.out.println("------------------------------------");
+                    }
+                    else {
+                        Task newTask = new Deadline(desc, by);
+                        tasks.add(newTask);
+                        printAdded(newTask, tasks.size());
+                    }
+                    continue;
+                }
 
             }
 
             //Handle Event
-            if (input.startsWith("event ")){
-                String[] parts = input.substring(6).split("/from|/to");
-                if (parts.length < 3 ){
-                    System.out.println("Invalid event format.");
-                    continue;
+            else if (input.startsWith("event")) {
+                if (input.length() <= 6 || !input.contains("/from") || !input.contains("/to")) {
+                    System.out.println("------------------------------------");
+                    System.out.println("ehh an event must have description, /from and /to you goooon.");
+                    System.out.println("------------------------------------");
+                } else {
+                    String[] parts = input.substring(6).split("/from|/to");
+                    if (parts.length < 3) {
+                        System.out.println("------------------------------------");
+                        System.out.println("ehh invalid event description laaa you goooon.");
+                        System.out.println("------------------------------------");
+                    } else {
+                        String desc = parts[0].trim();
+                        String from = parts[1].trim();
+                        String to = parts[2].trim();
+                        if (desc.isEmpty() || from.isEmpty() || to.isEmpty()) {
+                            System.out.println("------------------------------------");
+                            System.out.println("ehh an event's description, /from and /to cannot be empty you goooon.");
+                            System.out.println("------------------------------------");
+                        } else {
+                            Task newTask = new Event(desc, from, to);
+                            tasks.add(newTask);
+                            printAdded(newTask, tasks.size());
+                        }
+
+                    }
+
+
                 }
-                String desc = parts[0].trim();
-                String from = parts[1].trim();
-                String to = parts[2].trim();
-                Task newTask = new Event(desc, from, to);
-                tasks.add(newTask);
-                printAdded(newTask, tasks.size());
                 continue;
             }
-
             else {
-                String desc = input;
-                Task newTask = new Task(desc);
-                tasks.add(newTask);
-                System.out.println("added: " + desc);
+                //Random command
+                System.out.println("------------------------------------");
+                System.out.println("ehh what are you saying i dun understand leh you goooon.");
+                System.out.println("------------------------------------");
             }
 
         }
