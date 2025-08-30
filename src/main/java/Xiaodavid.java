@@ -102,6 +102,23 @@ public class Xiaodavid {
                     printAdded(newTask, tasks.size());
                 }
 
+                else if (input.startsWith("delete")) {
+                    if (input.length() <= 7) {
+                        throw new XiaodavidException("ehh must specify which task number to delete la you goooon.");
+                    }
+                    int index = Integer.parseInt(input.substring(7)) - 1;
+                    if (index < 0 || index >= tasks.size()) {
+                        throw new XiaodavidException("that task number dont exist la you goooon.");
+                    }
+                    Task removed = tasks.remove(index);
+                    System.out.println("------------------------------------");
+                    System.out.println("Noted. I've removed this task:");
+                    System.out.println("  " + removed);
+                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                    System.out.println("------------------------------------");
+                }
+
+
                 else {
                     throw new XiaodavidException("ehh what are you saying i dun understand leh you goooon.");
                 }
