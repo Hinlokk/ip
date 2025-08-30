@@ -1,58 +1,89 @@
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
 import java.util.ArrayList;
 
+/**
+ * Handles saving and loading tasks from a file.
+ */
 public class Storage {
-    private String filePath;
+    private final String filePath;
 
     public Storage(String filePath) {
         this.filePath = filePath;
     }
 
-    public ArrayList<Task> load() throws IOException {
+    /**
+     * Loads tasks from the save file.
+     * If file or folder does not exist, creates them and returns an empty list.
+     */
+    public ArrayList<Task> load() throws DukeException {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
 
-        // if file doesn't exist, create folder & file
-        if (!file.exists()) {
-            file.getParentFile().mkdirs(); // create ./data folder if missing
-            file.createNewFile();
-            return tasks;
-        }
-
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        String line;
-        while ((line = br.readLine()) != null) {
-            String[] parts = line.split(" \\| ");
-            String type = parts[0];
-            boolean isDone = parts[1].equals("1");
-            String description = parts[2];
-
-            Task task;
-            switch (type) {
-                case "T":
-                    task = new Todo(description);
-                    break;
-                case "D":
-                    task = new Deadline(description, parts[3]);
-                    break;
-                case "E":
-                    task = new Event(description, parts[3]);
-                    break;
-                default:
-                    continue;
+        try {
+            // Create folder if missing
+            File parentDir = file.getParentFile();
+            if (!parentDir.exists()) {
+                parentDir.mkdirs();
             }
-            if (isDone) task.markAsDone();
-            tasks.add(task);
+
+            // Create file if missing
+            if (!file.exists()) {
+                file.createNewFile();
+                return tasks;
+            }
+
+            // Read tasks
+            Scanner sc = new Scanner(file);
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+                String[] parts = line.split(" \\| ");
+                String type = parts[0];
+                int isDone = Integer.parseInt(parts[1]);
+                String description = parts[2];
+
+                Task t;
+                switch (type) {
+                    case "T":
+                        t = new ToDo(description);
+                        break;
+                    case "D":
+                        t = new Deadline(description, parts[3]);
+                        break;
+                    case "E":
+                        t = new Event(description, parts[3]);
+                        break;
+                    default:
+                        throw new DukeException("Corrupted data file: unknown task type");
+                }
+
+                if (isDone == 1) {
+                    t.markAsDone();
+                }
+                tasks.add(t);
+            }
+            sc.close();
+        } catch (IOException e) {
+            throw new DukeException("Error loading save file: " + e.getMessage());
         }
-        br.close();
+
         return tasks;
     }
 
-    public void save(ArrayList<Task> tasks) throws IOException {
-        FileWriter fw = new FileWriter(filePath);
-        for (Task task : tasks) {
-            fw.write(task.toFileFormat() + System.lineSeparator());
+    /**
+     * Saves all tasks into the save file.
+     */
+    public void save(ArrayList<Task> tasks) throws DukeException {
+        try {
+            FileWriter fw = new FileWriter(filePath);
+            for (Task t : tasks) {
+                fw.write(t.toSaveFormat() + System.lineSeparator());
+            }
+            fw.close();
+        } catch (IOException e) {
+            throw new DukeException("Error saving tasks: " + e.getMessage());
         }
-        fw.close();
     }
 }
