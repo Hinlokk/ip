@@ -19,7 +19,7 @@ public class Xiaodavid {
                 break;
             }
 
-            else if (input.equals("list")){
+            if (input.equals("list")){
                 System.out.println("------------------------------------");
                 System.out.println("Here are the tasks in your list:");
                 for(int i = 0; i < tasks.size();i++) {
@@ -30,7 +30,7 @@ public class Xiaodavid {
                 continue;
             }
 
-            else if (input.startsWith("mark")){
+            if (input.startsWith("mark")){
                 try {
                     int index = Integer.parseInt(input.substring(5)) - 1;
                     Task tsk =  tasks.get(index);
@@ -44,7 +44,7 @@ public class Xiaodavid {
                 }
 
             }
-            else if (input.startsWith("unmark")){
+            if (input.startsWith("unmark")){
                 try {
                     int index = Integer.parseInt(input.substring(7)) - 1;
                     Task tsk =  tasks.get(index);
@@ -57,6 +57,41 @@ public class Xiaodavid {
                     System.out.println("Invalid Task number.");
                 }
             }
+            // Handle todo
+            if (input.startsWith("todo ")) {
+                String desc = input.substring(5);
+                Task newTask = new Todo(desc);
+                tasks.add(newTask);
+                printAdded(newTask, tasks.size());
+                continue;
+            }
+            //Handle deadline
+            if (input.startsWith("deadline ")){
+                String[] parts = input.substring(9).split("/by",2);
+                String desc = parts[0].trim();
+                String by = parts.length > 1 ? parts[1].trim() : "";
+                Task newTask = new Deadline(desc, by);
+                tasks.add(newTask);
+                printAdded(newTask, tasks.size());
+                continue;
+
+            }
+
+            //Handle Event
+            if (input.startsWith("event ")){
+                String[] parts = input.substring(6).split("/from|/to");
+                if (parts.length < 3 ){
+                    System.out.println("Invalid event format.");
+                    continue;
+                }
+                String desc = parts[0].trim();
+                String from = parts[1].trim();
+                String to = parts[2].trim();
+                Task newTask = new Event(desc, from, to);
+                tasks.add(newTask);
+                printAdded(newTask, tasks.size());
+                continue;
+            }
 
             else {
                 String desc = input;
@@ -67,6 +102,14 @@ public class Xiaodavid {
 
         }
         sc.close();
+        }
+
+        private static void printAdded(Task t, int total){
+            System.out.println("-----------------------------------");
+            System.out.println("Got it. I've added this task: ");
+            System.out.println("  " + t);
+            System.out.println("Now you have " + total + " tasks in the list.");
+            System.out.println("-----------------------------------");
         }
     }
 
