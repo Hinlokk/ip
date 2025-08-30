@@ -97,11 +97,27 @@ public class Xiaodavid {
                     case EVENT: {
                         String desc = pc.args[0];
                         LocalDate from = Parser.parseDate(pc.args[1]);
-                        LocalDate to   = Parser.parseDate(pc.args[2]);
+                        LocalDate to = Parser.parseDate(pc.args[2]);
                         Task newTask = new Event(desc, from, to);
                         tasks.add(newTask);
                         storage.save(tasks.getAll());
                         ui.showAdded(newTask, tasks.size());
+                        break;
+                    }
+                    case FIND: {
+                        String keyword = pc.args[0];
+                        var matches = tasks.findTasks(keyword);
+
+                        ui.showLine();
+                        if (matches.isEmpty()) {
+                            System.out.println("No matching tasks found.");
+                        } else {
+                            System.out.println("Here are the matching tasks in your list:");
+                            for (int i = 0; i < matches.size(); i++) {
+                                System.out.println((i + 1) + "." + matches.get(i));
+                            }
+                        }
+                        ui.showLine();
                         break;
                     }
 
