@@ -17,9 +17,12 @@ public class Storage {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
 
-        // If file doesn't exist yet, create directories + empty file
+        // If file doesn't exist yet, create directories (if any) + empty file
         if (!file.exists()) {
-            file.getParentFile().mkdirs();
+            File parentDir = file.getParentFile();
+            if (parentDir != null) {
+                parentDir.mkdirs();
+            }
             file.createNewFile();
             return tasks;
         }
@@ -61,9 +64,15 @@ public class Storage {
     }
 
     public void save(ArrayList<Task> tasks) throws IOException {
-        BufferedWriter bw = new BufferedWriter(new FileWriter(filePath));
+        File file = new File(filePath);
+        File parentDir = file.getParentFile();
+        if (parentDir != null) {
+            parentDir.mkdirs();
+        }
+
+        BufferedWriter bw = new BufferedWriter(new FileWriter(file));
         for (Task t : tasks) {
-            bw.write(t.toSaveFormat()); // relies on Xiaodavid.Deadline/Xiaodavid.Event/Xiaodavid.Todo formatting their dates correctly
+            bw.write(t.toSaveFormat()); // relies on Deadline/Event/Todo formatting their dates correctly
             bw.newLine();
         }
         bw.close();

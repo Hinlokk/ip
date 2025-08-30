@@ -28,11 +28,23 @@ test {
 }
 
 application {
-    mainClass.set("seedu.duke.Duke")
+    mainClass = "Xiaodavid.Xiaodavid"
+}
+
+jar {
+    manifest {
+        attributes(
+                "Main-Class": "Xiaodavid.Xiaodavid" // same main class
+        )
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
 
 shadowJar {
-    archiveBaseName = "duke"
+    archiveBaseName = "Xiaodavid"
     archiveClassifier = null
 }
 
