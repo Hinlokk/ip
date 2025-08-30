@@ -97,7 +97,7 @@ public class Xiaodavid {
                     case EVENT: {
                         String desc = pc.args[0];
                         LocalDate from = Parser.parseDate(pc.args[1]);
-                        LocalDate to   = Parser.parseDate(pc.args[2]);
+                        LocalDate to = Parser.parseDate(pc.args[2]);
                         Task newTask = new Event(desc, from, to);
                         tasks.add(newTask);
                         storage.save(tasks.getAll());

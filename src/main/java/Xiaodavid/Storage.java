@@ -5,23 +5,36 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+/**
+ * Handles saving and loading of tasks from a file.
+ */
 public class Storage {
     private String filePath;
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    /**
+     * Creates a Storage object with the given file path.
+     *
+     * @param filePath path of the save file
+     */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
 
+    /**
+     * Loads tasks from the save file.
+     * If the file does not exist, a new empty file is created.
+     *
+     * @return list of tasks loaded from the file
+     * @throws IOException if there is an error accessing the file
+     */
     public ArrayList<Task> load() throws IOException {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
 
-        // If file doesn't exist yet, create directories (if any) + empty file
         if (!file.exists()) {
-            File parentDir = file.getParentFile();
-            if (parentDir != null) {
-                parentDir.mkdirs();
+            if (file.getParentFile() != null) {
+                file.getParentFile().mkdirs();
             }
             file.createNewFile();
             return tasks;
@@ -63,16 +76,16 @@ public class Storage {
         return tasks;
     }
 
+    /**
+     * Saves tasks to the save file.
+     *
+     * @param tasks list of tasks to save
+     * @throws IOException if there is an error writing to the file
+     */
     public void save(ArrayList<Task> tasks) throws IOException {
-        File file = new File(filePath);
-        File parentDir = file.getParentFile();
-        if (parentDir != null) {
-            parentDir.mkdirs();
-        }
-
-        BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+        BufferedWriter bw = new BufferedWriter(new FileWriter(filePath));
         for (Task t : tasks) {
-            bw.write(t.toSaveFormat()); // relies on Deadline/Event/Todo formatting their dates correctly
+            bw.write(t.toSaveFormat());
             bw.newLine();
         }
         bw.close();
