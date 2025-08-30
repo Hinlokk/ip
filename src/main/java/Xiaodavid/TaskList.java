@@ -1,3 +1,5 @@
+package Xiaodavid;
+
 import java.util.ArrayList;
 
 public class TaskList {
@@ -31,7 +33,7 @@ public class TaskList {
         return tasks.remove(index);
     }
 
-    /** Expose the underlying list for Storage.save(...) */
+    /** Expose the underlying list for Xiaodavid.Storage.save(...) */
     public ArrayList<Task> getAll() {
         return tasks;
     }

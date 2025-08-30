@@ -1,3 +1,5 @@
+package Xiaodavid;
+
 import java.util.Scanner;
 
 public class Ui {
@@ -8,7 +10,7 @@ public class Ui {
     }
 
     public void showWelcome() {
-        System.out.println("Hello! I'm Xiaodavid!");
+        System.out.println("Hello! I'm Xiaodavid.Xiaodavid!");
         System.out.println("What can I do for you?");
     }
 
