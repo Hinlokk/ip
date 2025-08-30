@@ -104,6 +104,22 @@ public class Xiaodavid {
                         ui.showAdded(newTask, tasks.size());
                         break;
                     }
+                    case FIND: {
+                        String keyword = pc.args[0];
+                        var matches = tasks.findTasks(keyword);
+
+                        ui.showLine();
+                        if (matches.isEmpty()) {
+                            System.out.println("No matching tasks found.");
+                        } else {
+                            System.out.println("Here are the matching tasks in your list:");
+                            for (int i = 0; i < matches.size(); i++) {
+                                System.out.println((i + 1) + "." + matches.get(i));
+                            }
+                        }
+                        ui.showLine();
+                        break;
+                    }
 
                     default:
                         throw new XiaodavidException("ehh what are you saying i dun understand leh you goooon.");

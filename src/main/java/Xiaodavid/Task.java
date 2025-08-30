@@ -32,6 +32,14 @@ public abstract class Task {
     public String getStatusIcon() {
         return (isDone ? "X" : " ");
     }
+    /**
+     * Returns the task's description.
+     *
+     * @return the description of the task
+     */
+    public String getDescription() {
+        return description;
+    }
 
     /**
      * Returns a string suitable for saving the task to file.
