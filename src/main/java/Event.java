@@ -2,24 +2,29 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class Event extends Task {
-    protected LocalDate from;
-    protected LocalDate to;
+    private LocalDate from;
+    private LocalDate to;
+    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    public Event(String description, String from, String to) {
+    public Event(String description, LocalDate from, LocalDate to) {
         super(description, TaskType.EVENT);
-        this.from = LocalDate.parse(from); // expects yyyy-mm-dd
-        this.to = LocalDate.parse(to);     // expects yyyy-mm-dd
+        this.from = from;
+        this.to = to;
     }
 
     @Override
     public String toSaveFormat() {
-        return "E | " + (isDone ? 1 : 0) + " | " + description + " | " + from + " | " + to;
+        return String.join(" | ",
+                type.getSymbol(),
+                (isDone ? "1" : "0"),
+                description,
+                from.format(DATE_FORMAT),  // <-- format LocalDate into String
+                to.format(DATE_FORMAT)
+        );
     }
 
     @Override
     public String toString() {
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("MMM d yyyy");
-        return super.toString() + " (from: " + from.format(fmt)
-                + " to: " + to.format(fmt) + ")";
+        return super.toString() + " (from: " + from.format(DATE_FORMAT) + " to: " + to.format(DATE_FORMAT) + ")";
     }
 }

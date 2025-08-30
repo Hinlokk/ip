@@ -1,10 +1,8 @@
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.io.File;
-import java.io.FileWriter;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.io.IOException;
-import java.util.List;
-import java.util.Scanner;
 
 public class Xiaodavid {
     private static final String FILE_PATH = "tasks.txt";
@@ -12,7 +10,15 @@ public class Xiaodavid {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         String input;
-        ArrayList<Task> tasks = loadTasks(); // load tasks at start
+        Storage storage = new Storage(FILE_PATH);
+        ArrayList<Task> tasks;
+
+        try {
+            tasks = storage.load();
+        } catch (Exception e) {
+            System.out.println("Error loading tasks: " + e.getMessage());
+            tasks = new ArrayList<>();
+        }
 
         System.out.println("Hello! I'm Xiaodavid!");
         System.out.println("What can I do for you?");
@@ -46,7 +52,11 @@ public class Xiaodavid {
                     }
                     Task tsk = tasks.get(index);
                     tsk.markAsDone();
-                    saveTasks(tasks); // save after change
+                    try {
+                        storage.save(tasks);
+                    } catch (IOException e) {
+                        System.out.println("Error saving tasks: " + e.getMessage());
+                    }
                     System.out.println("------------------------------------");
                     System.out.println("Nice! I've marked this task as done:");
                     System.out.println("  " + tsk);
@@ -60,7 +70,11 @@ public class Xiaodavid {
                     }
                     Task tsk = tasks.get(index);
                     tsk.markAsUndone();
-                    saveTasks(tasks); // save after change
+                    try {
+                        storage.save(tasks);
+                    } catch (IOException e) {
+                        System.out.println("Error saving tasks: " + e.getMessage());
+                    }
                     System.out.println("------------------------------------");
                     System.out.println("OK, I've marked this task as not done yet:");
                     System.out.println("  " + tsk);
@@ -74,7 +88,11 @@ public class Xiaodavid {
                     String desc = input.substring(5).trim();
                     Task newTask = new Todo(desc);
                     tasks.add(newTask);
-                    saveTasks(tasks);
+                    try {
+                        storage.save(tasks);
+                    } catch (IOException e) {
+                        System.out.println("Error saving tasks: " + e.getMessage());
+                    }
                     printAdded(newTask, tasks.size());
                 }
 
@@ -84,13 +102,25 @@ public class Xiaodavid {
                     }
                     String[] parts = input.substring(9).split("/by", 2);
                     String desc = parts[0].trim();
-                    String by = parts[1].trim();
-                    if (desc.isEmpty() || by.isEmpty()) {
+                    String byStr = parts[1].trim();
+                    if (desc.isEmpty() || byStr.isEmpty()) {
                         throw new XiaodavidException("ehh deadline description or /by cannot be empty you goooon.");
                     }
+
+                    LocalDate by;
+                    try {
+                        by = LocalDate.parse(byStr); // expects yyyy-MM-dd
+                    } catch (DateTimeParseException e) {
+                        throw new XiaodavidException("date format must be yyyy-mm-dd leh you goooon.");
+                    }
+
                     Task newTask = new Deadline(desc, by);
                     tasks.add(newTask);
-                    saveTasks(tasks);
+                    try {
+                        storage.save(tasks);
+                    } catch (IOException e) {
+                        System.out.println("Error saving tasks: " + e.getMessage());
+                    }
                     printAdded(newTask, tasks.size());
                 }
 
@@ -103,14 +133,27 @@ public class Xiaodavid {
                         throw new XiaodavidException("ehh invalid event description laaa you goooon.");
                     }
                     String desc = parts[0].trim();
-                    String from = parts[1].trim();
-                    String to = parts[2].trim();
-                    if (desc.isEmpty() || from.isEmpty() || to.isEmpty()) {
+                    String fromStr = parts[1].trim();
+                    String toStr = parts[2].trim();
+                    if (desc.isEmpty() || fromStr.isEmpty() || toStr.isEmpty()) {
                         throw new XiaodavidException("ehh an event's description, /from and /to cannot be empty you goooon.");
                     }
+
+                    LocalDate from, to;
+                    try {
+                        from = LocalDate.parse(fromStr); // yyyy-MM-dd
+                        to = LocalDate.parse(toStr);
+                    } catch (DateTimeParseException e) {
+                        throw new XiaodavidException("date format must be yyyy-mm-dd leh you goooon.");
+                    }
+
                     Task newTask = new Event(desc, from, to);
                     tasks.add(newTask);
-                    saveTasks(tasks);
+                    try {
+                        storage.save(tasks);
+                    } catch (IOException e) {
+                        System.out.println("Error saving tasks: " + e.getMessage());
+                    }
                     printAdded(newTask, tasks.size());
                 }
 
@@ -123,7 +166,11 @@ public class Xiaodavid {
                         throw new XiaodavidException("that task number dont exist la you goooon.");
                     }
                     Task removed = tasks.remove(index);
-                    saveTasks(tasks);
+                    try {
+                        storage.save(tasks);
+                    } catch (IOException e) {
+                        System.out.println("Error saving tasks: " + e.getMessage());
+                    }
                     System.out.println("------------------------------------");
                     System.out.println("Noted. I've removed this task:");
                     System.out.println("  " + removed);
@@ -154,65 +201,5 @@ public class Xiaodavid {
         System.out.println("  " + t);
         System.out.println("Now you have " + total + " tasks in the list.");
         System.out.println("-----------------------------------");
-    }
-
-    // === SAVE TASKS ===
-    private static void saveTasks(List<Task> tasks) {
-        try {
-            FileWriter writer = new FileWriter(FILE_PATH);
-            for (Task t : tasks) {
-                writer.write(t.toSaveFormat() + System.lineSeparator());
-            }
-            writer.close();
-        } catch (IOException e) {
-            System.out.println("Error saving tasks: " + e.getMessage());
-        }
-    }
-
-    // === LOAD TASKS ===
-    private static ArrayList<Task> loadTasks() {
-        ArrayList<Task> tasks = new ArrayList<>();
-        File file = new File(FILE_PATH);
-
-        if (!file.exists()) {
-            return tasks; // return empty list if no file
-        }
-
-        try {
-            Scanner reader = new Scanner(file);
-            while (reader.hasNextLine()) {
-                String line = reader.nextLine();
-                String[] parts = line.split(" \\| ");
-                String type = parts[0];
-                boolean isDone = parts[1].equals("1");
-                String desc = parts[2];
-
-                switch (type) {
-                    case "T":
-                        Todo todo = new Todo(desc);
-                        if (isDone) todo.markAsDone();
-                        tasks.add(todo);
-                        break;
-                    case "D":
-                        String by = parts[3];
-                        Deadline deadline = new Deadline(desc, by);
-                        if (isDone) deadline.markAsDone();
-                        tasks.add(deadline);
-                        break;
-                    case "E":
-                        String from = parts[3];
-                        String to = parts[4];
-                        Event event = new Event(desc, from, to);
-                        if (isDone) event.markAsDone();
-                        tasks.add(event);
-                        break;
-                }
-            }
-            reader.close();
-        } catch (Exception e) {
-            System.out.println("Error loading tasks: " + e.getMessage());
-        }
-
-        return tasks;
     }
 }
