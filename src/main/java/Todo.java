@@ -4,12 +4,11 @@ public class Todo extends Task {
     }
 
     @Override
-    public String toString() {
-        return super.toString();
-    }
-
-    @Override
     public String toSaveFormat() {
-        return "T | " + (isDone ? "1" : "0") + " | " + description;
+        return String.join(" | ",
+                type.getSymbol(),              // "T"
+                (isDone ? "1" : "0"),          // done flag
+                description
+        );
     }
 }
