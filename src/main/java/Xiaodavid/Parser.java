@@ -60,6 +60,14 @@ public class Parser {
             return new ParsedCommand(CommandType.DEADLINE, desc, byStr);
         }
 
+        if (cmd.startsWith("find")) {
+            if (cmd.length() <= 4 || cmd.substring(5).trim().isEmpty()) {
+                throw new XiaodavidException("ehh must provide a keyword to find leh you goooon.");
+            }
+            String keyword = cmd.substring(5).trim();
+            return new ParsedCommand(CommandType.FIND, keyword);
+        }
+
         if (cmd.startsWith("event")) {
             if (cmd.length() <= 5 || !cmd.contains("/from") || !cmd.contains("/to")) {
                 throw new XiaodavidException("ehh an event must have description, /from and /to you goooon.");

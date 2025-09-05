@@ -6,14 +6,16 @@ package Xiaodavid;
 public abstract class Task {
     protected String description;
     protected boolean isDone;
+    protected TaskType type;
 
     /**
      * Creates a Task with the given description.
      *
      * @param description description of the task
      */
-    public Task(String description) {
+    public Task(String description, TaskType type) {
         this.description = description;
+        this.type = type;
         this.isDone = false;
     }
 
@@ -23,6 +25,10 @@ public abstract class Task {
     public void markAsDone() {
         this.isDone = true;
     }
+    /**
+     * Marks the task as undone.
+     */
+    public void markAsUndone() {this.isDone = false; }
 
     /**
      * Returns the status icon of the task.
