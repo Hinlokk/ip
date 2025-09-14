@@ -55,6 +55,20 @@ public abstract class Task {
     public abstract String toSaveFormat();
 
     @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Task other = (Task) obj;
+        return this.description.equals(other.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return description.hashCode();
+    }
+
+    @Override
     public String toString() {
         return "[" + getStatusIcon() + "] " + description;
     }

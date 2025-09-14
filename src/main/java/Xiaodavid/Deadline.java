@@ -28,6 +28,19 @@ public class Deadline extends Task {
                 by.format(DATE_FORMAT)
         );
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (!super.equals(obj)) return false;
+        if (getClass() != obj.getClass()) return false;
+
+        Deadline other = (Deadline) obj;
+        return this.by.equals(other.by);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode() + by.hashCode();
+    }
 
     @Override
     public String toString() {

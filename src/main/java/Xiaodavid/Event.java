@@ -34,6 +34,21 @@ public class Event extends Task {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (!super.equals(obj)) return false;
+        if (getClass() != obj.getClass()) return false;
+
+        Event other = (Event) obj;
+        return this.from.equals(other.from) && this.to.equals(other.to);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode() + from.hashCode() + to.hashCode();
+    }
+
+
+    @Override
     public String toString() {
         return super.toString() + " (from: " + from.format(DATE_FORMAT) + " to: " + to.format(DATE_FORMAT) + ")";
     }

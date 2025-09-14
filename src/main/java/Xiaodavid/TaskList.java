@@ -38,7 +38,6 @@ public class TaskList {
         return tasks;
     }
 
-
     public String listTasks() {
         if (tasks.isEmpty()) {
             return "You got no tasks now leh!";
@@ -50,20 +49,29 @@ public class TaskList {
         return sb.toString();
     }
 
-    public String addTodo(String desc) {
+    public String addTodo(String desc) throws XiaodavidException {
         Task t = new Todo(desc);
+        if (contains(t)) {
+            throw new XiaodavidException("Duplicate todo detected: " + t);
+        }
         tasks.add(t);
         return "Added new todo:\n  " + t + "\nNow you have " + tasks.size() + " tasks in the list.";
     }
 
-    public String addDeadline(String desc, String by) {
+    public String addDeadline(String desc, String by) throws XiaodavidException {
         Task t = new Deadline(desc, by);
+        if (contains(t)) {
+            throw new XiaodavidException("Duplicate deadline detected: " + t);
+        }
         tasks.add(t);
         return "Added new deadline:\n  " + t + "\nNow you have " + tasks.size() + " tasks in the list.";
     }
 
-    public String addEvent(String desc, String from, String to) {
+    public String addEvent(String desc, String from, String to) throws XiaodavidException {
         Task t = new Event(desc, from, to);
+        if (contains(t)) {
+            throw new XiaodavidException("Duplicate event detected: " + t);
+        }
         tasks.add(t);
         return "Added new event:\n  " + t + "\nNow you have " + tasks.size() + " tasks in the list.";
     }
@@ -95,6 +103,10 @@ public class TaskList {
             sb.append((i + 1)).append(". ").append(matches.get(i)).append("\n");
         }
         return sb.toString();
+    }
+
+    public boolean contains(Task task) {
+        return tasks.contains(task);
     }
 
     // Existing logic (still useful internally)
