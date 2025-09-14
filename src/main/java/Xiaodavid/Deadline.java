@@ -7,9 +7,16 @@ public class Deadline extends Task {
     private LocalDate by;
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    // Accept LocalDate
     public Deadline(String description, LocalDate by) {
         super(description, TaskType.DEADLINE);
         this.by = by;
+    }
+
+    // New constructor: accept String input and parse to LocalDate
+    public Deadline(String description, String byStr) {
+        super(description, TaskType.DEADLINE);
+        this.by = LocalDate.parse(byStr); // throws exception if format wrong
     }
 
     @Override
@@ -18,7 +25,7 @@ public class Deadline extends Task {
                 type.getSymbol(),
                 (isDone ? "1" : "0"),
                 description,
-                by.format(DATE_FORMAT)   // <-- format LocalDate into String
+                by.format(DATE_FORMAT)
         );
     }
 

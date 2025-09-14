@@ -8,10 +8,18 @@ public class Event extends Task {
     private LocalDate to;
     private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
+    // Accept LocalDate
     public Event(String description, LocalDate from, LocalDate to) {
         super(description, TaskType.EVENT);
         this.from = from;
         this.to = to;
+    }
+
+    // New constructor: accept Strings
+    public Event(String description, String fromStr, String toStr) {
+        super(description, TaskType.EVENT);
+        this.from = LocalDate.parse(fromStr);
+        this.to = LocalDate.parse(toStr);
     }
 
     @Override
@@ -20,7 +28,7 @@ public class Event extends Task {
                 type.getSymbol(),
                 (isDone ? "1" : "0"),
                 description,
-                from.format(DATE_FORMAT),  // <-- format LocalDate into String
+                from.format(DATE_FORMAT),
                 to.format(DATE_FORMAT)
         );
     }
