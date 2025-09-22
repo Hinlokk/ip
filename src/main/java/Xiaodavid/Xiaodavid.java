@@ -20,7 +20,7 @@ public class Xiaodavid {
     }
 
     public String getWelcomeMessage() {
-        return "Hello! I am Xiaodavid 😎\n" +
+        return "Hello! I am Xiaodavid \n" +
                 "Here are some commands you can use:\n" +
                 "- todo <description>\n" +
                 "- deadline <description> /by <yyyy-mm-dd>\n" +
@@ -63,7 +63,7 @@ public class Xiaodavid {
                 case BYE:
                     return "Bye goooooooooooon, see you again never!";
                 default:
-                    return "ehh you gooooon, I don’t understand your command leh.";
+                    return "ehh you gooooon, I dont understand your command leh.";
             }
         } catch (XiaodavidException e) {
             return e.getMessage();
