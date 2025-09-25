@@ -27,8 +27,8 @@ public class MainWindow extends AnchorPane {
 
     private Xiaodavid xiaodavid;
 
-    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/Gigachad.png"));
-    private Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/David.png"));
+    private Image gigaChadImage = new Image(this.getClass().getResourceAsStream("/images/Gigachad.png"));
+    private Image davidImage = new Image(this.getClass().getResourceAsStream("/images/David.png"));
 
     /** Initializes the controller. */
     @FXML
@@ -43,7 +43,7 @@ public class MainWindow extends AnchorPane {
 
         // Show welcome message at startup
         dialogContainer.getChildren().add(
-                DialogBox.getDukeDialog(xiaodavid.getWelcomeMessage(), dukeImage)
+                DialogBox.getDukeDialog(xiaodavid.getWelcomeMessage(), davidImage)
         );
     }
 
@@ -58,8 +58,8 @@ public class MainWindow extends AnchorPane {
         String response = xiaodavid.getResponse(input);
 
         dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(input, userImage),
-                DialogBox.getDukeDialog(response, dukeImage)
+                DialogBox.getUserDialog(input, gigaChadImage),
+                DialogBox.getDukeDialog(response, davidImage)
         );
 
         userInput.clear();

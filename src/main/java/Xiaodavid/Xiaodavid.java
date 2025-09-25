@@ -20,7 +20,7 @@ public class Xiaodavid {
     }
 
     public String getWelcomeMessage() {
-        return "Hello! I am Xiaodavid 😎\n" +
+        return "Hello! I am Xiaodavid!\n" +
                 "Here are some commands you can use:\n" +
                 "- todo <description>\n" +
                 "- deadline <description> /by <yyyy-mm-dd>\n" +
