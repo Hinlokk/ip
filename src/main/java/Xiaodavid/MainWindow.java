@@ -27,8 +27,8 @@ public class MainWindow extends AnchorPane {
 
     private Xiaodavid xiaodavid;
 
-    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/DaUser.png"));
-    private Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/DaDuke.png"));
+    private Image userImage = new Image(this.getClass().getResourceAsStream("/images/Gigachad.png"));
+    private Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/David.png"));
 
     /** Initializes the controller. */
     @FXML
