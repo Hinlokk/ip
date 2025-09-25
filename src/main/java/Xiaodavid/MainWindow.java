@@ -35,6 +35,9 @@ public class MainWindow extends AnchorPane {
     public void initialize() {
         // Auto-scroll to the bottom when new messages are added
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+
+        //Set background colour
+        scrollPane.setStyle("-fx-background: #2c3e50; -fx-background-color: #2c3e50;");
     }
 
     /** Injects the Xiaodavid instance and shows the welcome message. */
