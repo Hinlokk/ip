@@ -63,7 +63,7 @@ public class Xiaodavid {
                 case BYE:
                     return "Bye goooooooooooon, see you again never!";
                 default:
-                    return "ehh you gooooon, I don’t understand your command leh.";
+                    return "ehh you gooooon, I dont understand your command leh.";
             }
         } catch (XiaodavidException e) {
             return e.getMessage();

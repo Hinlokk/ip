@@ -1,6 +1,7 @@
 package Xiaodavid;
 
 import java.util.ArrayList;
+import java.time.format.DateTimeParseException;
 
 public class TaskList {
     private final ArrayList<Task> tasks;
@@ -56,31 +57,47 @@ public class TaskList {
         return "Added new todo:\n  " + t + "\nNow you have " + tasks.size() + " tasks in the list.";
     }
 
-    public String addDeadline(String desc, String by) {
-        Task t = new Deadline(desc, by);
+    public String addDeadline(String desc, String by) throws XiaodavidException {
+    try {Task t = new Deadline(desc, by);
         tasks.add(t);
         return "Added new deadline:\n  " + t + "\nNow you have " + tasks.size() + " tasks in the list.";
+    } catch (DateTimeParseException e) {
+        throw new XiaodavidException("date format must be yyyy-mm-dd leh you goooon.");
+        }
     }
 
-    public String addEvent(String desc, String from, String to) {
-        Task t = new Event(desc, from, to);
-        tasks.add(t);
-        return "Added new event:\n  " + t + "\nNow you have " + tasks.size() + " tasks in the list.";
+    public String addEvent(String desc, String from, String to) throws XiaodavidException {
+        try {
+            Task t = new Event(desc, from, to);
+            tasks.add(t);
+            return "Added new event:\n  " + t + "\nNow you have " + tasks.size() + " tasks in the list.";
+        } catch (DateTimeParseException e) {
+            throw new XiaodavidException("date format must be yyyy-mm-dd leh you goooon.");
+        }
     }
 
-    public String markTask(int index) {
+    public String markTask(int index) throws XiaodavidException {
+        if (index < 0 || index >= tasks.size()) {
+            throw new XiaodavidException("ehh that task number does not exist la you goooon.");
+        }
         Task t = tasks.get(index);
         t.markAsDone();
         return "Shiok, I marked this as done:\n  " + t;
     }
 
-    public String unmarkTask(int index) {
+    public String unmarkTask(int index) throws XiaodavidException {
+        if (index < 0 || index >= tasks.size()) {
+            throw new XiaodavidException("ehh that task number does not exist la you goooon.");
+        }
         Task t = tasks.get(index);
         t.markAsUndone();
         return "Ok lor, I unmarked this task:\n  " + t;
     }
 
-    public String deleteTask(int index) {
+    public String deleteTask(int index) throws XiaodavidException {
+        if (index < 0 || index >= tasks.size()) {
+            throw new XiaodavidException("ehh that task number does not exist la you goooon.");
+        }
         Task t = tasks.remove(index);
         return "Removed this task:\n  " + t + "\nNow you have " + tasks.size() + " tasks left.";
     }

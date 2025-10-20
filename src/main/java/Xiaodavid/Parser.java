@@ -2,6 +2,7 @@ package Xiaodavid;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.time.format.DateTimeFormatter;
 
 public class Parser {
 
@@ -14,6 +15,9 @@ public class Parser {
             this.args = args;
         }
     }
+
+    private static final DateTimeFormatter DISPLAY_FORMAT =
+            DateTimeFormatter.ofPattern("MMM dd yyyy"); // e.g. Oct 01 2025
 
     public static Parser.ParsedCommand parse(String input) throws XiaodavidException {
         String cmd = input.trim();
@@ -99,4 +103,5 @@ public class Parser {
             throw new XiaodavidException("date format must be yyyy-mm-dd leh you goooon.");
         }
     }
+
 }

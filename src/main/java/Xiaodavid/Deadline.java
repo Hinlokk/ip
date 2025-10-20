@@ -5,7 +5,11 @@ import java.time.format.DateTimeFormatter;
 
 public class Deadline extends Task {
     private LocalDate by;
-    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    // ISO format for saving
+    private static final DateTimeFormatter SAVE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    // Friendly format for displaying
+    private static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy");
 
     // Accept LocalDate
     public Deadline(String description, LocalDate by) {
@@ -13,10 +17,10 @@ public class Deadline extends Task {
         this.by = by;
     }
 
-    // New constructor: accept String input and parse to LocalDate
-    public Deadline(String description, String byStr) {
+    // Accept String input and parse with Parser for validation
+    public Deadline(String description, String byStr) throws XiaodavidException {
         super(description, TaskType.DEADLINE);
-        this.by = LocalDate.parse(byStr); // throws exception if format wrong
+        this.by = Parser.parseDate(byStr);
     }
 
     @Override
@@ -25,12 +29,13 @@ public class Deadline extends Task {
                 type.getSymbol(),
                 (isDone ? "1" : "0"),
                 description,
-                by.format(DATE_FORMAT)
+                by.format(SAVE_FORMAT)
         );
     }
 
     @Override
     public String toString() {
-        return super.toString() + " (by: " + by.format(DATE_FORMAT) + ")";
+        return   super.toString()
+                + " (by: " + by.format(DISPLAY_FORMAT) + ")";
     }
 }

@@ -47,6 +47,7 @@ public abstract class Task {
         return description;
     }
 
+
     /**
      * Returns a string suitable for saving the task to file.
      *
@@ -56,6 +57,6 @@ public abstract class Task {
 
     @Override
     public String toString() {
-        return "[" + getStatusIcon() + "] " + description;
+        return "[" + type.getSymbol() + "][" + getStatusIcon() + "]" + description;
     }
 }

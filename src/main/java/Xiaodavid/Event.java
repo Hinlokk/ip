@@ -6,20 +6,24 @@ import java.time.format.DateTimeFormatter;
 public class Event extends Task {
     private LocalDate from;
     private LocalDate to;
-    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    // Accept LocalDate
+    // For saving back to file (keep ISO)
+    private static final DateTimeFormatter SAVE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    // For displaying to user (pretty)
+    private static final DateTimeFormatter DISPLAY_FORMAT = DateTimeFormatter.ofPattern("MMM dd yyyy");
+
+    // Accept LocalDate directly
     public Event(String description, LocalDate from, LocalDate to) {
         super(description, TaskType.EVENT);
         this.from = from;
         this.to = to;
     }
 
-    // New constructor: accept Strings
-    public Event(String description, String fromStr, String toStr) {
+    // Accept String dates, use Parser.parseDate for validation
+    public Event(String description, String fromStr, String toStr) throws XiaodavidException {
         super(description, TaskType.EVENT);
-        this.from = LocalDate.parse(fromStr);
-        this.to = LocalDate.parse(toStr);
+        this.from = Parser.parseDate(fromStr);
+        this.to = Parser.parseDate(toStr);
     }
 
     @Override
@@ -28,13 +32,15 @@ public class Event extends Task {
                 type.getSymbol(),
                 (isDone ? "1" : "0"),
                 description,
-                from.format(DATE_FORMAT),
-                to.format(DATE_FORMAT)
+                from.format(SAVE_FORMAT),
+                to.format(SAVE_FORMAT)
         );
     }
 
     @Override
     public String toString() {
-        return super.toString() + " (from: " + from.format(DATE_FORMAT) + " to: " + to.format(DATE_FORMAT) + ")";
+        return super.toString()
+                + " (from: " + from.format(DISPLAY_FORMAT)
+                + " to: " + to.format(DISPLAY_FORMAT) + ")";
     }
 }
