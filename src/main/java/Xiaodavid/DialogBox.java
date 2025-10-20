@@ -50,11 +50,23 @@ public class DialogBox extends HBox {
         getChildren().setAll(tmp);
         setAlignment(Pos.TOP_LEFT);
     }
-
+    /**
+     * Creates a dialog bubble representing user input.
+     *
+     * @param text message content to display
+     * @param img avatar image for the speaker
+     * @return a dialog box with standard left-to-right layout
+     */
     public static DialogBox getUserDialog(String text, Image img) {
         return new DialogBox(text, img);
     }
-
+    /**
+     * Creates a dialog bubble representing Xiaodavid's reply.
+     *
+     * @param text response content to display
+     * @param img avatar image for Xiaodavid
+     * @return a dialog box with flipped layout to indicate the bot speaker
+     */
     public static DialogBox getDukeDialog(String text, Image img) {
         var db = new DialogBox(text, img);
         db.flip();

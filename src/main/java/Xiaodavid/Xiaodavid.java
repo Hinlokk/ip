@@ -2,11 +2,17 @@ package Xiaodavid;
 
 import java.io.IOException;
 import java.time.LocalDate;
-
+/**
+ * Core application logic that orchestrates command parsing, task manipulation and responses.
+ */
 public class Xiaodavid {
     private final TaskList tasks;
     private final Storage storage;
-
+    /**
+     * Creates a new Xiaodavid instance backed by storage at the given file path.
+     *
+     * @param filePath path to the persistent task data file
+     */
     public Xiaodavid(String filePath) {
         storage = new Storage(filePath);
         TaskList loadedTasks;
@@ -18,7 +24,11 @@ public class Xiaodavid {
         }
         tasks = loadedTasks;
     }
-
+    /**
+     * Returns the welcome message shown when the UI is initialised.
+     *
+     * @return formatted welcome string
+     */
     public String getWelcomeMessage() {
         return "Hello! I am Xiaodavid, a goon!\n" +
                 "Here are some commands you can use:\n" +
@@ -32,7 +42,12 @@ public class Xiaodavid {
                 "- find <keyword>\n" +
                 "- bye";
     }
-
+    /**
+     * Processes a user command and returns the response message to display.
+     *
+     * @param input raw user command
+     * @return response message describing the outcome
+     */
     public String getResponse(String input) {
         try {
             Parser.ParsedCommand parsed = Parser.parse(input);

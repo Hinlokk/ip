@@ -3,13 +3,22 @@ package Xiaodavid;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.time.format.DateTimeFormatter;
-
+/**
+ * Parses raw user input into high-level commands understood by the application.
+ */
 public class Parser {
-
+    /**
+     * Represents a parsed command with its type and extracted arguments.
+     */
     public static class ParsedCommand {
         public final CommandType type;
         public final String[] args;
-
+        /**
+         * Creates a parsed command wrapper.
+         *
+         * @param type command type that was recognised
+         * @param args additional tokens associated with the command
+         */
         public ParsedCommand(CommandType type, String... args) {
             this.type = type;
             this.args = args;
@@ -18,7 +27,13 @@ public class Parser {
 
     private static final DateTimeFormatter DISPLAY_FORMAT =
             DateTimeFormatter.ofPattern("MMM dd yyyy"); // e.g. Oct 01 2025
-
+    /**
+     * Parses a user input string into a {@link ParsedCommand} instance.
+     *
+     * @param input raw user input
+     * @return parsed command describing the action to perform
+     * @throws XiaodavidException if the command is malformed
+     */
     public static Parser.ParsedCommand parse(String input) throws XiaodavidException {
         String cmd = input.trim();
 
@@ -91,10 +106,23 @@ public class Parser {
 
         return new ParsedCommand(CommandType.UNKNOWN);
     }
-
+    /**
+     * Converts a 1-based string index to a zero-based integer.
+     *
+     * @param s index string supplied by the user
+     * @return zero-based integer index
+     * @throws NumberFormatException if the string is not a valid integer
+     */
     public static int parseIndex(String s) throws NumberFormatException {
         return Integer.parseInt(s) - 1; // convert 1-based to 0-based
     }
+    /**
+     * Parses an ISO date string into a {@link LocalDate}.
+     *
+     * @param s date string in {@code yyyy-MM-dd} format
+     * @return parsed {@link LocalDate}
+     * @throws XiaodavidException if the date string cannot be parsed
+     */
 
     public static LocalDate parseDate(String s) throws XiaodavidException {
         try {

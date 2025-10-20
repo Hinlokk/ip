@@ -6,11 +6,17 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
+/**
+ * Entry point for the JavaFX application.
+ */
 public class Main extends Application {
 
     private Xiaodavid xiaodavid = new Xiaodavid("tasks.txt");
-
+    /**
+     * Loads the main window FXML, injects the bot and displays the stage.
+     *
+     * @param stage primary JavaFX stage provided by the runtime
+     */
     @Override
     public void start(Stage stage) {
         try {
